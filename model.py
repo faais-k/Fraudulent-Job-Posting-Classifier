@@ -54,13 +54,13 @@ def preprocess_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     num_cols = ["has_company_logo", "has_questions", "telecommuting"]
 
-    # ---- Handle missing values ----
+    # Handle missing values
     # Text: replace NaN with empty string
     for col in text_cols:
         if col in df.columns:
             df[col] = df[col].fillna("")
         else:
-            # If any expected text column is missing, create it as empty
+
             df[col] = ""
 
     # Categorical: replace NaN with "Unknown"
@@ -70,14 +70,14 @@ def preprocess_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         else:
             df[col] = "Unknown"
 
-    # Numeric flags: if missing (unlikely), fill with 0
+
     for col in num_cols:
         if col in df.columns:
             df[col] = df[col].fillna(0)
         else:
             df[col] = 0
 
-    # ---- Combine text fields into a single feature ----
+    # Combine text fields into a single feature
     df["text_all"] = (
         df["title"]
         + " "
@@ -90,7 +90,7 @@ def preprocess_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         + df["benefits"]
     )
 
-    # ---- Length-based features ----
+    # Length-based features
     df["desc_len"] = df["description"].str.len()
     df["req_len"] = df["requirements"].str.len()
     df["profile_len"] = df["company_profile"].str.len()
@@ -143,7 +143,7 @@ def generate_red_flag_patterns(df: pd.DataFrame,
         lowercase=True,
         stop_words="english",
         ngram_range=(1, 2),
-        min_df=5  # ignore very rare phrases
+        min_df=5
     )
     X_vec = vectorizer.fit_transform(X_text)
 
@@ -172,7 +172,7 @@ def main():
     print("Preprocessing dataframe...")
     df = preprocess_dataframe(df)
 
-    # Define columns again here to keep things explicit and in sync with preprocess
+    
     cat_cols = [
         "employment_type",
         "required_experience",
@@ -220,7 +220,7 @@ def main():
     print(f"Saving metadata to {META_PATH} ...")
     joblib.dump({"cat_cols": cat_cols, "num_cols": num_cols}, META_PATH)
 
-    # 🔥 Generate red-flag patterns JSON for Flask app
+    # Generate red-flag patterns JSON for Flask app
     generate_red_flag_patterns(df, RED_FLAGS_PATH, top_n=50)
 
     print("Done.")

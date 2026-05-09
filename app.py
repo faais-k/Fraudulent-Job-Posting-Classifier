@@ -6,7 +6,7 @@ import json
 import difflib
 
 
-# ===== Load model and metadata =====
+# Load model and metadata
 model_path = "fraud_job_model.pkl"
 meta_path = "fraud_job_meta.pkl"
 
@@ -20,17 +20,16 @@ num_cols = meta["num_cols"]
 
 app = Flask(__name__)
 
-# ===== Red-flag keyword groups =====
 import json
 
-# ===== Load red-flag patterns from JSON =====
+# Load red-flag patterns from JSON
 RED_FLAG_GROUPS = {}
 
 red_flags_path = "red_flags.json"
 if os.path.exists(red_flags_path):
     with open(red_flags_path, "r", encoding="utf-8") as f:
         data = json.load(f)
-        # Expecting: {"auto_red_flags": ["term1", "term2", ...]}
+
         auto_flags = data.get("auto_red_flags", [])
         RED_FLAG_GROUPS["auto"] = auto_flags
 else:
@@ -51,13 +50,13 @@ else:
     }
 
 
-# ===== Personal data leak terms =====
+# Personal data leak terms
 PERSONAL_DATA_PATTERNS = [
     "aadhaar", "aadhar", "pan card", "passport", "bank account",
     "ifsc", "cvv", "social security", "id card", "driver's license"
 ]
 
-# ===== Employer credibility config =====
+# Employer credibility config
 TRUSTED_COMPANIES = []
 trusted_path = "trusted_companies.json"
 if os.path.exists(trusted_path):
@@ -113,11 +112,7 @@ def compute_employer_credibility(company_name: str,
         if best_match:
             score += 15
 
-    # 6. Placeholder for future online checks (WHOIS, MCA, LinkedIn, etc.)
-    # For now, this is just a stub to show in report as "future work".
-    # Example idea:
-    # online_boost = check_company_online(name_clean)
-    # score += online_boost
+
 
     # clip to [0, 100]
     score = max(0, min(100, score))
@@ -125,17 +120,15 @@ def compute_employer_credibility(company_name: str,
 
 
 
-# ===================== HOME ROUTE =====================
 @app.route("/", methods=["GET"])
 def home():
     return render_template("index.html")
 
 
-# ===================== PREDICT ROUTE =====================
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        # ---- 1. Read form fields ----
+        # Read form fields
         title = request.form.get("title", "").strip()
         description = request.form.get("description", "").strip()
         requirements = request.form.get("requirements", "").strip()
@@ -152,7 +145,7 @@ def predict():
         has_questions = int(request.form.get("has_questions", "0"))
         telecommuting = int(request.form.get("telecommuting", "0"))
 
-        # ---- 2. Combine text ----
+        # Combine text
         text_all = " ".join([
             title,
             description,
@@ -161,19 +154,19 @@ def predict():
             benefits
         ]).strip()
 
-        # ---- 3. Create length-based features ----
+        # Create length-based features
         desc_len = len(description)
         req_len = len(requirements)
         profile_len = len(company_profile)
         benefits_len = len(benefits)
 
-        # ---- 4. Basic validation ----
+        # Basic validation
         words = text_all.split()
         if len(words) < 5 or len(text_all) < 30:
             return render_template("index.html", 
                 error="Input too short or low-information. Please provide a proper job description.")
 
-        # ---- 5. Build dataframe for model ----
+        # Build dataframe for model
         X_new = pd.DataFrame([{
             "text_all": text_all,
             "employment_type": employment_type,
@@ -190,9 +183,7 @@ def predict():
             "benefits_len": benefits_len
         }])
 
-        # ================================
-        # 🔥 6. RED FLAG PHRASE SCANNING
-        # ================================
+        # Red flag phrase scanning
         text_lower = text_all.lower()
         red_flags_found = []
 
@@ -205,9 +196,7 @@ def predict():
         red_flags_display = ", ".join(red_flags_clean) if red_flags_clean else "None detected"
 
 
-        # ================================
-        # 🔥 7. PERSONAL DATA RISK
-        # ================================
+        # Personal data risk
         personal_hits = [p for p in PERSONAL_DATA_PATTERNS if p in text_lower]
 
         if personal_hits:
@@ -215,9 +204,7 @@ def predict():
         else:
             personal_risk = "Low"
 
-        # ================================
-        # 🔥 8. MODEL CONFIDENCE & RISK LEVEL
-        # ================================
+        # Model confidence & risk level
         score = float(model.decision_function(X_new)[0])
 
         high_thr = 0.8
@@ -251,7 +238,7 @@ def predict():
         label = "Fraudulent" if base_pred == 1 else "Real"
 
         # Employer credibility score (0-100)
-        employer_name = title  # or add a separate "company_name" field later
+        employer_name = title
         employer_credibility = compute_employer_credibility(
             company_name=employer_name,
             company_profile=company_profile,
@@ -260,8 +247,6 @@ def predict():
             telecommuting=telecommuting
         )
 
-
-        # ===================== RENDER OUTPUT =====================
         return render_template("result.html",
                                label=label,
                                prediction=int(base_pred),
@@ -279,7 +264,7 @@ def predict():
                              error="An error occurred while processing your request. Please try again.")
 
 
-# ===================== API ROUTE =====================
+# API Route
 @app.route("/predict_api", methods=["POST"])
 def predict_api():
 

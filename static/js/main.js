@@ -1,6 +1,4 @@
-// ============================================
 // Main JavaScript for Job Fraud Detector
-// ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
     initializeForm();
@@ -10,9 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeScoreProgress();
 });
 
-// ============================================
 // Form Initialization
-// ============================================
 
 function initializeForm() {
     const form = document.getElementById('predictionForm');
@@ -68,9 +64,7 @@ function handleFormReset(event) {
     });
 }
 
-// ============================================
 // Character Counters
-// ============================================
 
 function initializeCharCounters() {
     const textareas = {
@@ -107,9 +101,7 @@ function updateCharCount(textarea, counterElement) {
     }
 }
 
-// ============================================
 // Form Validation
-// ============================================
 
 function initializeFormValidation() {
     const form = document.getElementById('predictionForm');
@@ -175,9 +167,7 @@ function clearFieldError(event) {
     }
 }
 
-// ============================================
 // Form Submission Handler
-// ============================================
 
 function handleFormSubmit(event) {
     const form = event.target;
@@ -225,21 +215,16 @@ function handleFormSubmit(event) {
         
         // If text input is visible (Other was selected), use its value
         if (textInput.style.display !== 'none' && textInput.value.trim() !== '') {
-            // Disable select to prevent its value from being submitted
-            select.disabled = true;
-            select.name = ''; // Remove name to prevent submission
-            textInput.name = fieldName; // Ensure text input has the correct name
+            select.name = '';
+            textInput.name = fieldName;
         } else {
-            // Use select value, disable text input
             textInput.disabled = true;
-            textInput.name = ''; // Remove name to prevent submission
+            textInput.name = '';
             select.disabled = false;
-            select.name = fieldName; // Ensure select has the correct name
+            select.name = fieldName;
         }
     });
     
-    // Form will submit normally - no preventDefault
-    // The loading state will remain until page reloads
     return true;
 }
 
@@ -299,9 +284,7 @@ function showError(message) {
     }, 5000);
 }
 
-// ============================================
 // Dynamic Field Conversion (Dropdown to Text)
-// ============================================
 
 function initializeDynamicFields() {
     const dynamicSelects = document.querySelectorAll('.dynamic-select');
@@ -334,7 +317,7 @@ function convertToTextInput(select) {
     
     // Hide select, show text input
     select.style.display = 'none';
-    select.disabled = true; // Disable to prevent submission
+    select.disabled = true;
     
     // Show and focus text input
     textInput.style.display = 'block';
@@ -362,7 +345,7 @@ function convertToSelect(select) {
     // Hide text input, show select
     textInput.style.display = 'none';
     textInput.disabled = true;
-    textInput.value = ''; // Clear the text input value
+    textInput.value = '';
     
     // Show select
     select.style.display = 'block';
@@ -372,9 +355,7 @@ function convertToSelect(select) {
     select.classList.add('field-appear');
 }
 
-// ============================================
 // Utility Functions
-// ============================================
 
 // Add smooth scroll behavior
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -390,9 +371,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// ============================================
 // Score Progress Animation
-// ============================================
 
 function initializeScoreProgress() {
     const progressRings = document.querySelectorAll('.circular-progress');
@@ -404,12 +383,10 @@ function initializeScoreProgress() {
         if (!progressCircle) return;
         
         // Calculate circumference (2 * π * radius)
-        // Radius matches SVG circle r="45"
         const radius = 45;
         const circumference = 2 * Math.PI * radius;
         
         // Calculate stroke-dashoffset based on score (0-100)
-        // Higher score = less offset (more filled)
         const offset = circumference - (score / 100) * circumference;
         
         // Set initial state

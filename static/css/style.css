@@ -1,6 +1,4 @@
-/* ============================================
-   Minimal Professional Design System
-   ============================================ */
+/* Minimal Professional Design System */
 
 :root {
     /* Neutral Color Palette */
@@ -60,9 +58,7 @@
     --transition: 150ms ease;
 }
 
-/* ============================================
-   Reset & Base Styles
-   ============================================ */
+/* Reset & Base Styles */
 
 * {
     margin: 0;
@@ -84,9 +80,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ============================================
-   App Container & Layout
-   ============================================ */
+/* App Container & Layout */
 
 .app-container {
     min-height: 100vh;
@@ -147,17 +141,13 @@ body {
     border-top: 1px solid var(--color-border);
 }
 
-/* ============================================
-   Page Container
-   ============================================ */
+/* Page Container */
 
 .page-container {
     width: 100%;
 }
 
-/* ============================================
-   Two Column Layout (Index Page)
-   ============================================ */
+/* Two Column Layout (Index Page) */
 
 .two-column-layout {
     display: grid;
@@ -175,9 +165,7 @@ body {
     top: var(--spacing-lg);
 }
 
-/* ============================================
-   Form Card
-   ============================================ */
+/* Form Card */
 
 .form-card {
     background: var(--color-bg-primary);
@@ -205,9 +193,7 @@ body {
     color: var(--color-text-secondary);
 }
 
-/* ============================================
-   Error Banner
-   ============================================ */
+/* Error Banner */
 
 .error-banner {
     display: flex;
@@ -226,9 +212,7 @@ body {
     flex-shrink: 0;
 }
 
-/* ============================================
-   Form Styles
-   ============================================ */
+/* Form Styles */
 
 .prediction-form {
     display: flex;
@@ -309,9 +293,7 @@ textarea {
     text-align: right;
 }
 
-/* ============================================
-   Dynamic Fields
-   ============================================ */
+/* Dynamic Fields */
 
 .dynamic-field-wrapper {
     position: relative;
@@ -327,9 +309,7 @@ textarea {
     display: none;
 }
 
-/* ============================================
-   Checkboxes
-   ============================================ */
+/* Checkboxes */
 
 .checkbox-group {
     display: flex;
@@ -356,9 +336,7 @@ textarea {
     margin: 0;
 }
 
-/* ============================================
-   Buttons
-   ============================================ */
+/* Buttons */
 
 .form-actions,
 .result-actions {
@@ -427,9 +405,7 @@ textarea {
     to { transform: rotate(360deg); }
 }
 
-/* ============================================
-   Info Panel (Sidebar)
-   ============================================ */
+/* Info Panel (Sidebar) */
 
 .info-panel {
     background: var(--color-bg-primary);
@@ -504,9 +480,7 @@ textarea {
     font-weight: bold;
 }
 
-/* ============================================
-   Result Page Layout
-   ============================================ */
+/* Result Page Layout */
 
 .result-layout {
     display: flex;
@@ -514,9 +488,7 @@ textarea {
     gap: var(--spacing-xl);
 }
 
-/* ============================================
-   Result Header Section
-   ============================================ */
+/* Result Header Section */
 
 .result-header-section {
     display: grid;
@@ -525,9 +497,7 @@ textarea {
     align-items: start;
 }
 
-/* ============================================
-   Classification Card
-   ============================================ */
+/* Classification Card */
 
 .classification-card {
     background: var(--color-bg-primary);
@@ -646,9 +616,7 @@ textarea {
     margin: 0;
 }
 
-/* ============================================
-   Risk Summary Card
-   ============================================ */
+/* Risk Summary Card */
 
 .risk-summary-card {
     background: var(--color-bg-primary);
